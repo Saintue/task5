@@ -44,6 +44,7 @@ function App() {
     setUserArr([...userArr, ...newUsers]);
   }
   async function updateData(value) {
+    page = 1;
     if (value.region !== undefined) locale = value.region;
     if (value.mistakes !== undefined) mistakes = value.mistakes;
     if (value.seed !== undefined) seed = value.seed;
