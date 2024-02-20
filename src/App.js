@@ -2,7 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Posts } from "./posts";
-let page = 1;
+export let page = 1;
 let locale = "en";
 let seed = 0;
 let mistakes = 0;
@@ -19,6 +19,7 @@ function App() {
   const [sliderValue, setSliderValue] = useState(0);
   const [mistakeValue, setMistakeValue] = useState(0);
   const [seedValue, setSeedValue] = useState(seed);
+  const [funcAwait, setFuncAwait] = useState(false)
   useEffect(() => {
     const getData = setTimeout(() => {
       updateData({ mistakes: mistakeValue });
@@ -33,7 +34,11 @@ function App() {
   }, [seedValue]);
 
   async function loadMore() {
-    page += 1;
+    if (funcAwait){
+      return
+    }
+    setFuncAwait(true)
+    page +=1;
     let newUsers = await Posts.getUsers({
       seed: seed,
       amount: 10,
@@ -42,6 +47,7 @@ function App() {
       page: page,
     });
     setUserArr([...userArr, ...newUsers]);
+    setFuncAwait(false)
   }
   async function updateData(value) {
     page = 1;
@@ -144,7 +150,7 @@ function App() {
               ))}
             </tbody>
           </table>
-          <button onClick={() => loadMore(page)}>Load More</button>
+          <button onClick={() => loadMore(page)} disabled={funcAwait}>Load More</button>
         </div>
       </body>
     </div>
